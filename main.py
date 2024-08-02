@@ -1,29 +1,29 @@
+import asyncio
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
-
-import asyncio
 import os
 
 from handlers import reg_handlers
-from database.core import create_tables, send_daily_reminders
+from database.core import create_tables, start_scheduler
 
-# Загрузка переменного окружения
+# Load environment variables
 load_dotenv()
 
-# Получение токена из переменной окружения
+# Get the token from environment variable
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+# Create bot and dispatcher instances
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-# Вызываем функцию для создания таблиц
+# Create tables in the database
 create_tables()
 
-reg_handlers(dp)
 
-# Запуск процесса поллинга новых апдейтов
 async def main():
-    asyncio.create_task(send_daily_reminders())
+    reg_handlers(dp)
+    # Start polling new updates
+    start_scheduler()
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

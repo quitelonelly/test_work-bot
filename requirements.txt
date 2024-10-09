@@ -1,0 +1,6 @@
+SQLAlchemy
+aiogram
+fastapi
+psycopg
+uvicorn
+alembic
